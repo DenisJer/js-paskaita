@@ -132,3 +132,76 @@ divElementas.innerText = 'Deniso div elementas';
 divElementas.classList.add('deniso-divas')
 
 document.body.appendChild(divElementas)
+
+
+
+const pridetiMygtukas = document.getElementById('prideti-mygtukas');
+const atimtiMygtukas = document.getElementById('atimti-mygtukas');
+
+let count = 0;
+const manoSkaicius = document.getElementById('mano-skaicius');
+manoSkaicius.innerText = count
+
+function prideti(event) {
+    console.log(event)
+    count++
+    manoSkaicius.innerText = count;
+}
+
+function atimti() {
+    count--
+    manoSkaicius.innerText = count;
+}
+
+pridetiMygtukas.addEventListener('click', prideti)
+atimtiMygtukas.addEventListener('click', atimti)
+
+
+const burgerBtn = document.getElementById('burger-btn');
+const manoForma = document.getElementById('mano-forma');
+burgerBtn.addEventListener('click', function () {
+    manoForma.classList.toggle('show')
+})
+
+manoForma.addEventListener('submit', function(event) {
+    event.preventDefault();
+    const formosDuomenys = new FormData(manoForma);
+    const payload = Object.fromEntries(formosDuomenys);
+
+    const vardasReiksme = payload.vardas;
+    const pavardeReiksme = payload.pavarde;
+    const vardoDiv = document.getElementById('vardo-div');
+    const pavardeDiv = document.getElementById('pavardes-div');
+
+    // formos error nuresetinimas
+    vardoDiv.classList.remove('error');
+    pavardeDiv.classList.remove('error');
+
+    // ar vardo laukas netuscias
+    if (!vardasReiksme.trim()) {
+        alert('Vardas laukas yra tuscias');
+        vardoDiv.classList.add('error');
+        return;
+    }
+    // ar vardo laukas netuscias
+    if (!pavardeReiksme.trim()) {
+        alert('Pavardes laukas yra tuscias');
+        pavardeDiv.classList.add('error');
+        return;
+    }
+    // patikrinam ar ivesta yra tik raides
+    if (!/^[A-Za-z]+$/.test(vardasReiksme) || !/^[A-Za-z]+$/.test(pavardeReiksme)) {
+        alert('Leidziama ivesti tik raides');
+        if (!/^[A-Za-z]+$/.test(vardasReiksme)){
+            vardoDiv.classList.add('error');
+        }
+        if (!/^[A-Za-z]+$/.test(pavardeReiksme)){
+            pavardeDiv.classList.add('error');
+        }
+        return;
+    }
+    
+    
+    // kreipimasis i backenda 
+    console.log(payload)
+})
