@@ -107,101 +107,138 @@
 
 // console.log('Denisas naujas');
 
-let heading1tags = document.getElementsByTagName('h1');
+// let heading1tags = document.getElementsByTagName('h1');
 
-for(let i = 0; i < heading1tags.length; i++) {
-    // console.log(heading1tags[i])
-    if(i === 0) {
-        heading1tags[i].innerText = i;
-        // background-color: blue;
-        heading1tags[i].style.backgroundColor = 'yellow';
+// for(let i = 0; i < heading1tags.length; i++) {
+//     // console.log(heading1tags[i])
+//     if(i === 0) {
+//         heading1tags[i].innerText = i;
+//         // background-color: blue;
+//         heading1tags[i].style.backgroundColor = 'yellow';
+//     }
+
+//     if(i === 1) {
+//         heading1tags[i].innerHTML = '<span>' + i + '</span>';
+//         heading1tags[i].innerHTML = `<span>${i}</span>`
+//     }
+// }
+
+// let apieManeParagrafas = document.getElementById('apie-mane');
+// apieManeParagrafas.innerText = 'Tekstas apie mane';
+
+// let divElementas = document.createElement('div');
+
+// divElementas.innerText = 'Deniso div elementas';
+// divElementas.classList.add('deniso-divas')
+
+// document.body.appendChild(divElementas)
+
+// const pridetiMygtukas = document.getElementById('prideti-mygtukas');
+// const atimtiMygtukas = document.getElementById('atimti-mygtukas');
+
+// let count = 0;
+// const manoSkaicius = document.getElementById('mano-skaicius');
+// manoSkaicius.innerText = count
+
+// function prideti(event) {
+//     console.log(event)
+//     count++
+//     manoSkaicius.innerText = count;
+// }
+
+// function atimti() {
+//     count--
+//     manoSkaicius.innerText = count;
+// }
+
+// pridetiMygtukas.addEventListener('click', prideti)
+// atimtiMygtukas.addEventListener('click', atimti)
+
+
+// const burgerBtn = document.getElementById('burger-btn');
+
+// burgerBtn.addEventListener('click', function () {
+//     manoForma.classList.toggle('show')
+// })
+
+
+
+document.addEventListener('DOMContentLoaded', () => { 
+    const manoForma = document.getElementById('mano-forma');
+
+    async function loadUsers() {
+        const users = await fetch('http://localhost:3000/users').then(users => users.json())
+        return users;
     }
 
-    if(i === 1) {
-        heading1tags[i].innerHTML = '<span>' + i + '</span>';
-        heading1tags[i].innerHTML = `<span>${i}</span>`
+    // FUNCKCIJA KURI NURODO KAIP ATVAIZDUOTI USERIUS
+    async function displayUsers() {
+        const users = await loadUsers();
+        const usersListElement = document.getElementById('users-list');
+        const ulElement = document.createElement('ul');
+      
+        users.forEach(user => {
+            console.log(user)
+            const li = document.createElement('li');
+            // li.innerText = JSON.stringify(user);
+            let message = `${user.vardas} ${user.pavarde}`
+            if(user.amzius) {
+                message += `, ${user.amzius} m.`
+            } else {
+                message += `, amzius nezinomas!`
+            }
+            li.innerHTML = message;
+            ulElement.appendChild(li)
+        })
+        usersListElement.appendChild(ulElement)
     }
-}
+    // USERIU ATVAIZDAVIMO FUNKCIJA ISKVIECIAMA
+    displayUsers();
 
-let apieManeParagrafas = document.getElementById('apie-mane');
-apieManeParagrafas.innerText = 'Tekstas apie mane';
+    manoForma.addEventListener('submit', function (event) {
+        event.preventDefault();
+        const formosDuomenys = new FormData(manoForma);
+        const payload = Object.fromEntries(formosDuomenys);
 
-let divElementas = document.createElement('div');
+        const vardasReiksme = payload.vardas;
+        const pavardeReiksme = payload.pavarde;
+        const vardoDiv = document.getElementById('vardo-div');
+        const pavardeDiv = document.getElementById('pavardes-div');
 
-divElementas.innerText = 'Deniso div elementas';
-divElementas.classList.add('deniso-divas')
+        // formos error nuresetinimas
+        vardoDiv.classList.remove('error');
+        pavardeDiv.classList.remove('error');
 
-document.body.appendChild(divElementas)
-
-
-
-const pridetiMygtukas = document.getElementById('prideti-mygtukas');
-const atimtiMygtukas = document.getElementById('atimti-mygtukas');
-
-let count = 0;
-const manoSkaicius = document.getElementById('mano-skaicius');
-manoSkaicius.innerText = count
-
-function prideti(event) {
-    console.log(event)
-    count++
-    manoSkaicius.innerText = count;
-}
-
-function atimti() {
-    count--
-    manoSkaicius.innerText = count;
-}
-
-pridetiMygtukas.addEventListener('click', prideti)
-atimtiMygtukas.addEventListener('click', atimti)
-
-
-const burgerBtn = document.getElementById('burger-btn');
-const manoForma = document.getElementById('mano-forma');
-burgerBtn.addEventListener('click', function () {
-    manoForma.classList.toggle('show')
-})
-
-manoForma.addEventListener('submit', function(event) {
-    event.preventDefault();
-    const formosDuomenys = new FormData(manoForma);
-    const payload = Object.fromEntries(formosDuomenys);
-
-    const vardasReiksme = payload.vardas;
-    const pavardeReiksme = payload.pavarde;
-    const vardoDiv = document.getElementById('vardo-div');
-    const pavardeDiv = document.getElementById('pavardes-div');
-
-    // formos error nuresetinimas
-    vardoDiv.classList.remove('error');
-    pavardeDiv.classList.remove('error');
-
-    // ar vardo laukas netuscias
-    if (!vardasReiksme.trim()) {
-        alert('Vardas laukas yra tuscias');
-        vardoDiv.classList.add('error');
-        return;
-    }
-    // ar vardo laukas netuscias
-    if (!pavardeReiksme.trim()) {
-        alert('Pavardes laukas yra tuscias');
-        pavardeDiv.classList.add('error');
-        return;
-    }
-    // patikrinam ar ivesta yra tik raides
-    if (!/^[A-Za-z]+$/.test(vardasReiksme) || !/^[A-Za-z]+$/.test(pavardeReiksme)) {
-        alert('Leidziama ivesti tik raides');
-        if (!/^[A-Za-z]+$/.test(vardasReiksme)){
+        // ar vardo laukas netuscias
+        if (!vardasReiksme.trim()) {
+            alert('Vardas laukas yra tuscias');
             vardoDiv.classList.add('error');
+            return;
         }
-        if (!/^[A-Za-z]+$/.test(pavardeReiksme)){
+        // ar vardo laukas netuscias
+        if (!pavardeReiksme.trim()) {
+            alert('Pavardes laukas yra tuscias');
             pavardeDiv.classList.add('error');
+            return;
         }
-        return;
-    }
-    
-    
-    // kreipimasis i backenda 
-    console.log(payload)
+        // patikrinam ar ivesta yra tik raides
+        if (!/^[A-Za-z]+$/.test(vardasReiksme) || !/^[A-Za-z]+$/.test(pavardeReiksme)) {
+            alert('Leidziama ivesti tik raides');
+            if (!/^[A-Za-z]+$/.test(vardasReiksme)) {
+                vardoDiv.classList.add('error');
+            }
+            if (!/^[A-Za-z]+$/.test(pavardeReiksme)) {
+                pavardeDiv.classList.add('error');
+            }
+            return;
+        }
+
+        fetch(
+            'http://localhost:3000/users',
+            {
+                method: 'POST',
+                body: JSON.stringify(payload)
+            }
+        )
+    })
 })
