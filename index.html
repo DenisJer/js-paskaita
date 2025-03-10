@@ -5,25 +5,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Java script</title>
+    <style>
+        .error {
+            border: 1px solid red;
+        }
+
+        .show {
+            display: block;
+        }
+    </style>
 </head>
 
 <body>
-
-    <h1>
-
-    </h1>
-
-    <h1>
-
-    </h1>
-
-    <button id="prideti-mygtukas">Prideti</button>
+    <!-- <button id="prideti-mygtukas">Prideti</button>
     <button id="atimti-mygtukas">Atimti</button>
-    <p id="mano-skaicius"></p>
+    <p id="mano-skaicius"></p> -->
 
-    <button id="burger-btn">
+    <!-- <button id="burger-btn">
         Burger button
-    </button>
+    </button> -->
 
     <form id="mano-forma">
         <div id="vardo-div">
@@ -32,14 +32,26 @@
                 <input id="vardas" required name="vardas" type="text">
             </label>
         </div>
+
         <div id="pavardes-div">
             <label>
                 Pavarde:
                 <input required name="pavarde" type="text">
             </label>
         </div>
+
+        <div id="amzius-div">
+            <label>
+                Amzius:
+                <input name="amzius" type="number">
+            </label>
+        </div>
         <button type="submit">Pateikti</button>
     </form>
+
+    <div id="users-list">
+
+    </div>
 
 
     <script src="script.js"></script>
